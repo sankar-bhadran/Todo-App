@@ -1,17 +1,44 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div class="app">
+    <todo-input></todo-input>
+    <v-divider class="mb-4"></v-divider>
+    <todo-list @setStatus="setStatus">
+      <todo-item
+        v-for="item in $store.state.items"
+        :key="item.id"
+        :item="item"
+        :status="status"
+      ></todo-item>
+    </todo-list>
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+import TodoInput from "./components/TodoInput.vue";
+import TodoList from "./components/TodoList.vue";
+import TodoItem from "./components/TodoItem.vue";
 export default {
-  name: 'App',
+  name: "App",
+  data() {
+    return {
+      status: null,
+    };
+  },
   components: {
-    HelloWorld
-  }
-}
+    TodoInput,
+    TodoList,
+    TodoItem,
+  },
+  mounted() {
+    this.$store.dispatch("fetchTodos");
+  },
+  methods: {
+    setStatus(val) {
+      console.log("val", val);
+      this.status = val;
+    },
+  },
+};
 </script>
 
 <style>
